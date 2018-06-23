@@ -15,6 +15,13 @@ int player_01_y_ = kTopScreenOffset / 2;
 int player_02_x_ = LCDWIDTH - kPlayerWidth;
 int player_02_y_ = player_01_y_;
 
+// BALL DATA
+const int kBallSize = 6;
+int ball_x_ = player_02_x_ - kBallSize - 1;
+int ball_y_ = player_01_y_;
+int ball_velocity_x_ = 3;
+int ball_velocity_y_ = 3;
+
 void setup() {
   // put your setup code here, to run once:
   game_buino_.begin();
@@ -40,17 +47,59 @@ void ProcesInputFromPlayers() {
   }
 }
 
+void MoveBall() {
+  ball_x_ += ball_velocity_x_;
+  ball_y_ += ball_velocity_y_;
+
+  bool is_ball_under_screen = ball_y_ + kBallSize > LCDHEIGHT;
+  if (is_ball_under_screen) {
+    ball_velocity_y_ *= -1;
+    ball_y_ = LCDHEIGHT - kBallSize;
+    game_buino_.sound.playTick();
+  }
+
+  bool is_ball_over_screen = ball_y_ + kBallSize < 0;
+  if (is_ball_over_screen) {
+    ball_velocity_y_ *= -1;
+    ball_y_ = 0;
+    game_buino_.sound.playTick();
+  }
+
+  bool is_ball_touching_player_01_paddle =
+      ball_x_ + kBallSize < player_01_x_ &&
+      ball_y_ < player_01_y_ + kPlayerHeight / 2 &&
+      ball_y_ > player_01_y_ - kPlayerHeight / 2;
+  if (is_ball_touching_player_01_paddle) {
+    ball_velocity_x_ *= -1;
+    ball_x_ = player_01_x_ + kBallSize + 1;
+    game_buino_.sound.playTick();
+  }
+
+  bool is_ball_touching_player_02_paddle =
+      ball_x_ + kBallSize > player_02_x_ &&
+      ball_y_ < player_02_y_ + kPlayerHeight / 2 &&
+      ball_y_ > player_02_y_ - kPlayerHeight / 2;
+  if (is_ball_touching_player_02_paddle) {
+    ball_velocity_x_ *= -1;
+    ball_x_ = player_02_x_ - kBallSize - 1;
+    game_buino_.sound.playTick();
+  }
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
 
   // update returns true every 50 milisecons, this means we have 20 FPS
   if (game_buino_.update()) {
     ProcesInputFromPlayers();
-
+    MoveBall();
     // Draw players
     game_buino_.display.fillRect(player_01_x_, player_01_y_, kPlayerWidth,
                                  kPlayerHeight);
     game_buino_.display.fillRect(player_02_x_, player_02_y_, kPlayerWidth,
                                  kPlayerHeight);
+
+    // Draw Ball
+    game_buino_.display.fillCircle(ball_x_, ball_y_, kBallSize);
   }
 }

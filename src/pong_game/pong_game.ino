@@ -89,6 +89,53 @@ void MoveBall() {
   }
 }
 
+void PlayersScoring() {
+  bool reset_round = false;
+
+  bool is_ball_behind_player_01 = ball_x_ + kBallSize < player_01_x_;
+  if (is_ball_behind_player_01) {
+    reset_round = true;
+    ball_x_ = kOffsetFromPlayer01;
+    ball_velocity_x_ = kBallVelocity;
+    player_score_02_++;
+  }
+
+  bool is_ball_behind_player_02 =
+      ball_x_ - kBallSize > player_02_x_ + kPlayerWidth;
+  if (is_ball_behind_player_02) {
+    reset_round = true;
+    ball_x_ = kOffsetFromPlayer02;
+    ball_velocity_x_ = -kBallVelocity;
+    player_score_01_++;
+  }
+
+  if (reset_round) {
+    ball_y_ = random(0, LCDHEIGHT - kBallSize);
+    game_buino_.sound.playCancel();
+  }
+}
+
+void PrintScore() {
+  game_buino_.display.cursorX = 21;
+  game_buino_.display.cursorY = 8;
+  game_buino_.display.print(player_score_01_);
+
+  game_buino_.display.cursorX = 57;
+  game_buino_.display.cursorY = 8;
+  game_buino_.display.print(player_score_02_);
+}
+
+void DrawGameElements() {
+  // Draw players
+  game_buino_.display.fillRect(player_01_x_, player_01_y_, kPlayerWidth,
+                               kPlayerHeight);
+  game_buino_.display.fillRect(player_02_x_, player_02_y_, kPlayerWidth,
+                               kPlayerHeight);
+
+  // Draw Ball
+  game_buino_.display.fillCircle(ball_x_, ball_y_, kBallSize);
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -96,13 +143,8 @@ void loop() {
   if (game_buino_.update()) {
     ProcesInputFromPlayers();
     MoveBall();
-    // Draw players
-    game_buino_.display.fillRect(player_01_x_, player_01_y_, kPlayerWidth,
-                                 kPlayerHeight);
-    game_buino_.display.fillRect(player_02_x_, player_02_y_, kPlayerWidth,
-                                 kPlayerHeight);
-
-    // Draw Ball
-    game_buino_.display.fillCircle(ball_x_, ball_y_, kBallSize);
+    DrawGameElements();
+    PlayersScoring();
+    PrintScore();
   }
 }

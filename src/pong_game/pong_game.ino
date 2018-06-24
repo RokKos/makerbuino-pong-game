@@ -136,6 +136,12 @@ void DrawGameElements() {
   game_buino_.display.fillCircle(ball_x_, ball_y_, kBallSize);
 }
 
+void CheckForExitGame() {
+  if (game_buino_.buttons.pressed(BTN_C)) {
+    game_buino_.titleScreen(F("Pong Tutorial"));
+  }
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -146,5 +152,6 @@ void loop() {
     DrawGameElements();
     PlayersScoring();
     PrintScore();
+    CheckForExitGame();
   }
 }

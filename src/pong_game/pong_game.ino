@@ -16,11 +16,16 @@ int player_02_x_ = LCDWIDTH - kPlayerWidth;
 int player_02_y_ = player_01_y_;
 
 // BALL DATA
-const int kBallSize = 6;
+const int kBallSize = 4;
+const int kBallVelocity = 3;
 int ball_x_ = player_02_x_ - kBallSize - 1;
 int ball_y_ = player_01_y_;
-int ball_velocity_x_ = 3;
-int ball_velocity_y_ = 3;
+int ball_velocity_x_ = kBallVelocity;
+int ball_velocity_y_ = kBallVelocity;
+
+// HELPER VARIABLES
+const int kOffsetFromPlayer01 = player_01_x_ + kPlayerWidth + kBallSize + 1;
+const int kOffsetFromPlayer02 = player_02_x_ - kBallSize - 1;
 
 void setup() {
   // put your setup code here, to run once:
@@ -58,30 +63,28 @@ void MoveBall() {
     game_buino_.sound.playTick();
   }
 
-  bool is_ball_over_screen = ball_y_ + kBallSize < 0;
+  bool is_ball_over_screen = ball_y_ - kBallSize < 0;
   if (is_ball_over_screen) {
     ball_velocity_y_ *= -1;
-    ball_y_ = 0;
+    ball_y_ = kBallSize;
     game_buino_.sound.playTick();
   }
 
   bool is_ball_touching_player_01_paddle =
-      ball_x_ + kBallSize < player_01_x_ &&
-      ball_y_ < player_01_y_ + kPlayerHeight / 2 &&
-      ball_y_ > player_01_y_ - kPlayerHeight / 2;
+      ball_x_ - kBallSize < player_01_x_ + kPlayerWidth &&
+      ball_y_ <= player_01_y_ + kPlayerHeight && ball_y_ > player_01_y_;
   if (is_ball_touching_player_01_paddle) {
     ball_velocity_x_ *= -1;
-    ball_x_ = player_01_x_ + kBallSize + 1;
+    ball_x_ = kOffsetFromPlayer01;
     game_buino_.sound.playTick();
   }
 
   bool is_ball_touching_player_02_paddle =
       ball_x_ + kBallSize > player_02_x_ &&
-      ball_y_ < player_02_y_ + kPlayerHeight / 2 &&
-      ball_y_ > player_02_y_ - kPlayerHeight / 2;
+      ball_y_ <= player_02_y_ + kPlayerHeight && ball_y_ > player_02_y_;
   if (is_ball_touching_player_02_paddle) {
     ball_velocity_x_ *= -1;
-    ball_x_ = player_02_x_ - kBallSize - 1;
+    ball_x_ = kOffsetFromPlayer02;
     game_buino_.sound.playTick();
   }
 }

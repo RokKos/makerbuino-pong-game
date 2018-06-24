@@ -23,6 +23,15 @@ int ball_y_ = player_01_y_;
 int ball_velocity_x_ = kBallVelocity;
 int ball_velocity_y_ = kBallVelocity;
 
+// LINES DATA
+const int kNumberOfLines = 12;
+const int kLineWidth = 2;
+const int kLineHeight = LCDHEIGHT / kNumberOfLines;
+const int kLineX = (LCDWIDTH - kLineWidth) / 2;
+
+// BORDERS DATA
+const int kBorderThickness = 1;
+
 // HELPER VARIABLES
 const int kOffsetFromPlayer01 = player_01_x_ + kPlayerWidth + kBallSize + 1;
 const int kOffsetFromPlayer02 = player_02_x_ - kBallSize - 1;
@@ -134,6 +143,16 @@ void DrawGameElements() {
 
   // Draw Ball
   game_buino_.display.fillCircle(ball_x_, ball_y_, kBallSize);
+
+  // Draw middle lines
+  for (int i = 0; i < kNumberOfLines; i += 2) {
+    game_buino_.display.fillRect(kLineX, i * kLineHeight, kLineWidth,
+                                 kLineHeight);
+  }
+
+  // Draw borders lines
+  game_buino_.display.fillRect(0, 0, LCDWIDTH, kBorderThickness);
+  game_buino_.display.fillRect(0, LCDHEIGHT - 1, LCDWIDTH, kBorderThickness);
 }
 
 void CheckForExitGame() {

@@ -39,7 +39,7 @@ const int kOffsetFromPlayer02 = player_02_x_ - kBallSize - 1;
 void setup() {
   // put your setup code here, to run once:
   game_buino_.begin();
-  game_buino_.titleScreen(F("Pong Tutorial"));
+  game_buino_.titleScreen(F("Pong for 2 players\n BY: Rok Kos"));
   game_buino_.pickRandomSeed();
   game_buino_.battery.show = false;
   game_buino_.display.fontSize = 2;

@@ -82,10 +82,10 @@ void ProcesInputFromPlayers() {
     player_01_y_ = min(kTopScreenOffset, player_01_y_ + kPlayerVelocityY);
   }
 
-  if (game_buino_.buttons.repeat(BTN_A, 1)) {
+  if (game_buino_.buttons.repeat(BTN_B, 1)) {
     player_02_y_ = max(0, player_02_y_ - kPlayerVelocityY);
   }
-  if (game_buino_.buttons.repeat(BTN_B, 1)) {
+  if (game_buino_.buttons.repeat(BTN_A, 1)) {
     player_02_y_ = min(kTopScreenOffset, player_02_y_ + kPlayerVelocityY);
   }
 }

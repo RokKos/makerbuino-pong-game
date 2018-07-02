@@ -107,6 +107,11 @@ const byte kPlayer02WinsBitmap[] PROGMEM = {
     0x07, 0xff, 0x00, 0x01, 0x00, 0x60, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00};
 
+// SOUNDS
+const byte soundfx[1][8] = {
+    {0, 6, 107, 1, 5, 4, 3, 8}  // Win sound
+};
+
 void ResetGame() {
   game_buino_.battery.show = false;
   game_buino_.display.fontSize = 2;
@@ -222,6 +227,18 @@ void PrintScore() {
   game_buino_.display.print(player_score_02_);
 }
 
+// FX Synth script
+void PlaySoundFX(int fxno, int channel) {
+  game_buino_.sound.command(0, soundfx[fxno][6], 0, channel);  // set volume
+  game_buino_.sound.command(1, soundfx[fxno][0], 0, channel);  // set waveform
+  game_buino_.sound.command(2, soundfx[fxno][5], -soundfx[fxno][4],
+                            channel);  // set volume slide
+  game_buino_.sound.command(3, soundfx[fxno][3], soundfx[fxno][2] - 58,
+                            channel);  // set pitch slide
+  game_buino_.sound.playNote(soundfx[fxno][1], soundfx[fxno][7],
+                             channel);  // play note
+}
+
 void JudgeSystem() {
   if (player_score_01_ < kWinConditionScore &&
       player_score_02_ < kWinConditionScore) {
@@ -230,10 +247,13 @@ void JudgeSystem() {
 
   if (player_score_01_ >= kWinConditionScore &&
       player_score_01_ - player_score_02_ >= 2) {
+    PlaySoundFX(0, 0);
     game_buino_.titleScreen(F(""), kPlayer01WinsBitmap);
+
     ResetGame();
   } else if (player_score_02_ >= kWinConditionScore &&
              player_score_02_ - player_score_01_ >= 2) {
+    PlaySoundFX(0, 0);
     game_buino_.titleScreen(F(""), kPlayer02WinsBitmap);
     ResetGame();
   }

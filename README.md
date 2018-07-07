@@ -1,5 +1,7 @@
 # MAKERbuino Pong Game
 
+![PONG GIF][gif]
+
 [![MIT License][license-badge]](https://github.com/RokKos/makerbuino-pong-game/blob/master/LICENSE)
 
 ### Table of Contents
@@ -52,3 +54,4 @@ There are 3 ways how to try out the game:
 This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/RokKos/makerbuino-pong-game/blob/master/LICENSE) file for details.
 
 [license-badge]:    https://img.shields.io/badge/license-MIT-007EC7.svg "MIT Lincense"
+[gif]: https://github.com/RokKos/makerbuino-pong-game/blob/master/screenshots/PONG2P_gif.gif

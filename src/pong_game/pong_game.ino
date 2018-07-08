@@ -173,7 +173,8 @@ void MoveBall() {
   }
 
   bool is_ball_touching_player_01_paddle =
-      ball_x_ - kBallSize < player_01_x_ + kPlayerWidth &&
+      ball_x_ - kBallSize <= player_01_x_ + kPlayerWidth &&
+      ball_x_ - kBallSize >= player_01_x_ &&
       ball_y_ <= player_01_y_ + kPlayerHeight && ball_y_ > player_01_y_;
   if (is_ball_touching_player_01_paddle) {
     ball_velocity_x_ *= -1;
@@ -182,7 +183,8 @@ void MoveBall() {
   }
 
   bool is_ball_touching_player_02_paddle =
-      ball_x_ + kBallSize > player_02_x_ &&
+      ball_x_ + kBallSize >= player_02_x_ &&
+      ball_x_ + kBallSize <= player_02_x_ + kPlayerWidth &&
       ball_y_ <= player_02_y_ + kPlayerHeight && ball_y_ > player_02_y_;
   if (is_ball_touching_player_02_paddle) {
     ball_velocity_x_ *= -1;
